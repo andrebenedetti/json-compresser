@@ -8,8 +8,8 @@ export function compress(data) {
     const strMap = {};
     let index = 0;
     while (true) {
-        const lrs = getLongestRepeatingSubstring(data, tokenIdentifier);
-        if (lrs.length < 10) {
+        const lrs = getLongestRepeatingSubstring(data);
+        if (lrs.length < 25) {
             break;
         }
 

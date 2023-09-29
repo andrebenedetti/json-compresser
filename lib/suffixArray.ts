@@ -17,16 +17,18 @@ function buildSuffixArray(str: string) {
 }
 
 
-function suffixArrayLongestRepeatingSubstring(suffixArray, identifier: string): string {
+function suffixArrayLongestRepeatingSubstring(suffixArray, minOccurences: number): string {
     const sorted = suffixArray.sort();
+    console.log(sorted)
 
     let longest: string | null = null;
-    for (let i = 0; i < sorted.length; i++) {
-        if (sorted[i + 1] === undefined) {
-            break;
+    for (let i = 0; i < sorted.length - minOccurences; i++) {
+        let strs: string[] = []
+        for (let j = i; j < i + minOccurences; j++) {
+            strs.push(sorted[j])
         }
-
-        const localLongest = longestSubtring(sorted[i], sorted[i + 1]);
+        const localLongest = longestSubtring(...strs);
+        // console.log(`Local longest: ${localLongest}`)
         if (longest === null || localLongest.length > longest.length) {
             longest = localLongest;
         }
@@ -39,14 +41,14 @@ function suffixArrayLongestRepeatingSubstring(suffixArray, identifier: string): 
     return longest;
 }
 
-export function getLongestRepeatingSubstring(data: Object, identifier: string): string {
+export function getLongestRepeatingSubstring(data: Object): string {
     const values = getAllStrings(data);
     const suffixArray: string[] = [];
     for (let str of values) {
         suffixArray.push(...buildSuffixArray(str));
     }
 
-    return suffixArrayLongestRepeatingSubstring(suffixArray, identifier);
+    return suffixArrayLongestRepeatingSubstring(suffixArray, 5);
 }
 
 

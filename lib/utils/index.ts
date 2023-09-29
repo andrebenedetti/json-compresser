@@ -24,13 +24,23 @@ export function mergeMaps(map1: Map<string, number>, map2: Map<string, number>):
     str2 = "ississippi"
     returns "issi"
 */
-export function longestSubtring(str1: string, str2: string) {
+export function longestSubtring(...args: string[]) {
+  console.log(args)
   let i = 0;
-  while (str1[i] === str2[i] && str1[i] !== undefined) {
+  function allCharactersEqualAtIndex(index: number, ...strs: string[]) {
+    for (let str of strs) {
+      if (str[index] !== args[0][index] || str[index] === undefined) {
+        return false
+      }
+    }
+
+    return true
+  }
+  while (allCharactersEqualAtIndex(i, ...args)) {
     i++;
   }
 
-  return str1.slice(0, i);
+  return args[0].slice(0, i);
 }
 
 // Recursively replace strings values from 'from' to 'to'.
