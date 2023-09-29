@@ -1,5 +1,5 @@
 import { getLongestRepeatingSubstring } from "./suffixArray";
-import { replaceAllStrings } from "./utils";
+import { replaceStringsInObject } from "./utils";
 
 export function compress(data) {
     const strMap = {};
@@ -11,7 +11,7 @@ export function compress(data) {
             break;
         }
 
-        data = replaceAllStrings(data, lrs, "$1");
+        data = replaceStringsInObject(data, lrs, "$1");
     }
 
     return data;

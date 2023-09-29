@@ -2,7 +2,7 @@
     Merges map2 into map1 and returns map1,
     summing key counts if key is in both maps.
 */
-export function mergeMaps(map1: Map<string, number>, map2: Map<string, number>) {
+export function mergeMaps(map1: Map<string, number>, map2: Map<string, number>): Map<string, number> {
   for (let [key, value] of map2) {
     if (map1.get(key)) {
       map1.set(key, (map1.get(key) || 0) + value);
@@ -33,7 +33,9 @@ export function longestSubtring(str1: string, str2: string) {
   return str1.slice(0, i);
 }
 
-export function replaceArrayValues(arr, from, to) {
+// Recursively replace strings values from 'from' to 'to'.
+// Also replaces substrings inside strings if they match 'from'
+export function replaceStringsInArray(arr: Array<unknown>, from: string, to: string): Array<unknown> {
   return arr.map((v) => {
     if (v === from) {
       return to;
@@ -44,15 +46,15 @@ export function replaceArrayValues(arr, from, to) {
     }
 
     if (Array.isArray(v)) {
-      return replaceArrayValues(v, from, to)
+      return replaceStringsInArray(v, from, to)
     }
 
-    return replaceAllStrings(v, from, to)
+    return replaceStringsInObject(v, from, to)
   });
 }
 
 
-export function replaceAllStrings(obj: Object, from: string, to: string) {
+export function replaceStringsInObject(obj: Object, from: string, to: string): Object {
   for (let [key, value] of Object.entries(obj)) {
     if (typeof value === "string") {
       obj[key] = value.replace(from, to);
@@ -65,9 +67,9 @@ export function replaceAllStrings(obj: Object, from: string, to: string) {
     }
 
     if (Array.isArray(value)) {
-      obj[key] = replaceArrayValues(value, from, to)
+      obj[key] = replaceStringsInArray(value, from, to)
     } else {
-      obj[key] = replaceAllStrings(obj[key], from, to);
+      obj[key] = replaceStringsInObject(obj[key], from, to);
     }
   }
 
@@ -77,7 +79,7 @@ export function replaceAllStrings(obj: Object, from: string, to: string) {
 /*
     Returns a Map with keyName -> count
 */
-export function countKeyOccurence(obj: Object) {
+export function countKeyOccurence(obj: Object): Map<string, number> {
   const keys = new Map();
 
   if (typeof obj !== 'object' || obj === null) {
@@ -100,7 +102,7 @@ export function countKeyOccurence(obj: Object) {
   return keys;
 }
 
-export function getAllStrings(obj: Object) {
+export function getAllStrings(obj: Object): string[] {
   if (typeof obj === "string") {
     return [obj];
   }

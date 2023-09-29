@@ -1,4 +1,4 @@
-import { getAllStrings, longestSubtring, replaceAllStrings } from "./utils";
+import { getAllStrings, longestSubtring } from "./utils";
 
 function buildSuffixArray(str: string) {
     const result: string[] = [];
