@@ -17,7 +17,7 @@ function buildSuffixArray(str: string) {
 }
 
 
-function suffixArrayLongestRepeatingSubstring(suffixArray) {
+function suffixArrayLongestRepeatingSubstring(suffixArray, identifier: string): string {
     const sorted = suffixArray.sort();
 
     let longest: string | null = null;
@@ -39,14 +39,14 @@ function suffixArrayLongestRepeatingSubstring(suffixArray) {
     return longest;
 }
 
-export function getLongestRepeatingSubstring(data: Object): string {
+export function getLongestRepeatingSubstring(data: Object, identifier: string): string {
     const values = getAllStrings(data);
     const suffixArray: string[] = [];
     for (let str of values) {
         suffixArray.push(...buildSuffixArray(str));
     }
 
-    return suffixArrayLongestRepeatingSubstring(suffixArray);
+    return suffixArrayLongestRepeatingSubstring(suffixArray, identifier);
 }
 
 

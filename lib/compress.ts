@@ -2,18 +2,26 @@ import { getLongestRepeatingSubstring } from "./suffixArray";
 import { replaceStringsInObject } from "./utils";
 
 export function compress(data) {
+    // This should be a token that does not occur in your dataset.
+    const tokenIdentifier = "$"
+
     const strMap = {};
-    const count = 0;
+    let index = 0;
     while (true) {
-        const lrs = getLongestRepeatingSubstring(data);
-        console.log(lrs);
-        if (lrs.length < 5) {
+        const lrs = getLongestRepeatingSubstring(data, tokenIdentifier);
+        if (lrs.length < 10) {
             break;
         }
 
-        data = replaceStringsInObject(data, lrs, "$1");
+        const symbol = `${tokenIdentifier}${index}`
+        strMap[symbol] = lrs
+        data = replaceStringsInObject(data, lrs, symbol);
+        index += 1
     }
 
-    return data;
+    return {
+        result: data,
+        strMap
+    };
 }
 
