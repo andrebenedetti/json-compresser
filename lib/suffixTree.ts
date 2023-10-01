@@ -54,10 +54,33 @@ export function printDepthFirst(root: TreeNode, symbol: string, acc: string, sum
         if (e.value === symbol && (e.occurrences || 0) > 1) {
             summary.push({
                 occurrences: (e.occurrences || 0),
-                value: e.value,
+                value: acc,
                 size: ((e.occurrences || 0) * acc.length) * 2
             })
         }
         printDepthFirst(e.target, symbol, acc + e.value, summary)
+    }
+}
+
+type Config = {
+    minOccurrences?: number
+    minSize?: number
+    minLength?: number
+}
+
+
+export function getRepeatedSuffixes(root: TreeNode, symbol: string, acc: string, summary: SummaryEntry[], config: Config) {
+    for (let e of root.edges) {
+        if (e.value === symbol && (e.occurrences || 1) >= (config.minOccurrences || 1) && acc.length >= (config.minLength || 3)) {
+            let size = (e.occurrences || 0) * acc.length * 2
+            if (!config.minSize || size >= config.minSize) {
+                summary.push({
+                    occurrences: (e.occurrences || 0),
+                    value: acc,
+                    size: ((e.occurrences || 0) * acc.length) * 2
+                })
+            }
+        }
+        getRepeatedSuffixes(e.target, symbol, acc + e.value, summary, config)
     }
 }

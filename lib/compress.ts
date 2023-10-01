@@ -1,5 +1,6 @@
 import { getLongestRepeatingSubstring } from "./suffixArray";
-import { SummaryEntry, addString, newTree, printDepthFirst } from "./suffixTree";
+import { SummaryEntry, addString, getRepeatedSuffixes, newTree } from "./suffixTree";
+import { TreeNode } from "./tree";
 import { getAllStrings, replaceStringsInObject } from "./utils";
 
 export function compressWithSuffixArray(data) {
@@ -26,18 +27,39 @@ export function compressWithSuffixArray(data) {
     };
 }
 
-
-export function compress(data) {
-    const symbol = "$"
+function buildSuffixTree(data: Object, symbol: string): TreeNode {
     const root = newTree()
     const strings = getAllStrings(data)
 
     for (let s of strings) {
         addString(root, s, symbol)
     }
+    return root
+}
 
-    const summary: SummaryEntry[] = []
-    printDepthFirst(root, symbol, "", summary)
+export function compress(data) {
+    const symbol = "$"
+    const marker = "__1"
 
-    console.log(summary.sort((a, b) => b.size - a.size).slice(10))
+    // check if symbol occurs in text
+    // check if marker occurs in text
+
+    // we're only getting repeated suffixes here
+    // we need to adjust it to get substrings
+    while (true) {
+        const root = buildSuffixTree(data, symbol)
+        let summary: SummaryEntry[] = []
+        getRepeatedSuffixes(root, symbol, "", summary, { minOccurrences: 2, minSize: 200, minLength: 4 })
+        summary = summary.filter(i => !i.value.includes(marker))
+        if (!summary.length) {
+            break;
+        }
+        summary.sort((a, b) => b.size - a.size)
+        console.log(`Replacing value ${summary[0].value}`)
+        data = replaceStringsInObject(data, summary[0].value, marker)
+    }
+
+    console.log("Finished")
+    console.log(`Compressed length: ${JSON.stringify(data).length}`)
+    console.log(JSON.stringify(data))
 }
