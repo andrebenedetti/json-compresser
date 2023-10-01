@@ -24,7 +24,6 @@ function buildSuffixArray(str: string) {
 
 function suffixArrayLongestRepeatingSubstring(suffixArray, minOccurences: number): string {
     const sorted = suffixArray.sort();
-    console.log(sorted)
 
     let longest: string | null = null;
     for (let i = 0; i < sorted.length - minOccurences; i++) {

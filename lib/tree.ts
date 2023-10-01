@@ -1,34 +1,38 @@
 export type TreeNode = {
     edges: Edge[]
     addEdge: (source: TreeNode, val: string) => Edge
-    label?: string
 }
 
 type Edge = {
     value: string
     source: TreeNode | null
     target: TreeNode
-    occurrences: number
+    // Only present if this is an edge to a leaf node
+    occurrences?: number
 }
 
-export function newEdge(source: TreeNode, value: string): Edge {
+export function newEdge(source: TreeNode, value: string, pointsToLeaf?: boolean): Edge {
     return {
         value,
         source,
-        target: newNode((source.label || "") + value),
-        occurrences: 1
+        target: newNode(),
+        occurrences: pointsToLeaf ? 1 : undefined
     }
 }
 
-export function newNode(label?: string): TreeNode {
+
+
+export function newNode(): TreeNode {
     const edges: Edge[] = []
-    return {
+    const node: TreeNode = {
         edges,
-        label,
         addEdge: ((source: TreeNode, value: string): Edge => {
             const edge = newEdge(source, value)
             edges.push(edge)
             return edge
         })
+
     }
+
+    return node
 }

@@ -1,7 +1,8 @@
 import { getLongestRepeatingSubstring } from "./suffixArray";
-import { replaceStringsInObject } from "./utils";
+import { addString, newTree, printDepthFirst } from "./suffixTree";
+import { getAllStrings, replaceStringsInObject } from "./utils";
 
-export function compress(data) {
+export function compressWithSuffixArray(data) {
     // This should be a token that does not occur in your dataset.
     const tokenIdentifier = "$"
 
@@ -25,3 +26,15 @@ export function compress(data) {
     };
 }
 
+
+export function compress(data) {
+    const symbol = "$"
+    const root = newTree()
+    const strings = getAllStrings(data)
+
+    for (let s of strings) {
+        addString(root, s, symbol)
+    }
+
+    printDepthFirst(root, symbol, "")
+}

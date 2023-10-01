@@ -1,10 +1,10 @@
 import { TreeNode, newEdge, newNode } from "./tree";
 
-function newTree() {
+export function newTree() {
     return newNode()
 }
 
-function addSuffix(root: TreeNode, s: string, symbol: string) {
+function addSuffix(root: TreeNode, s: string, symbol: string, fullSuffix: string) {
     // Add symbol to the end of the string to mark its end
     // in case it is not there yet.
     if (s[s.length - 1] !== symbol) {
@@ -17,9 +17,9 @@ function addSuffix(root: TreeNode, s: string, symbol: string) {
     // Add edge with termination symbol or increment occurences. 
     if (s[0] === symbol) {
         if (edge) {
-            edge.occurrences += 1
+            edge.occurrences = (edge?.occurrences || 0) + 1
         } else {
-            root.edges.push(newEdge(root, s[0]))
+            root.edges.push(newEdge(root, s[0], true))
         }
         return
     }
@@ -29,36 +29,25 @@ function addSuffix(root: TreeNode, s: string, symbol: string) {
         root.edges.push(edge)
     }
 
-    addSuffix(edge.target, s.slice(1), symbol)
+    addSuffix(edge.target, s.slice(1), symbol, fullSuffix)
     return
 }
 
 
-const root = newTree()
-
-function addString(root: TreeNode, s: string, symbol: string) {
+export function addString(root: TreeNode, s: string, symbol: string) {
     for (let i = 0; i < s.length; i++) {
         let suffix = s.slice(i)
-        console.log(`adding suffix ${suffix}`)
-        addSuffix(root, suffix, symbol)
+        addSuffix(root, suffix, symbol, suffix)
     }
 }
 
-addString(root, "abaaba", "$")
 
 
-function printDepthFirst(root: TreeNode, symbol) {
-    if (root?.label && root.label[root.label?.length - 1] === symbol) {
-        console.log(root.label)
-    }
+export function printDepthFirst(root: TreeNode, symbol, acc) {
     for (let e of root.edges) {
-        console.log({
-            value: e.value,
-            occurrences: e.occurrences
-        })
-
-        printDepthFirst(e.target, symbol)
+        if (e.value === symbol && (e.occurrences || 0) > 1) {
+            console.log(acc, e.occurrences)
+        }
+        printDepthFirst(e.target, symbol, acc + e.value)
     }
 }
-
-printDepthFirst(root, "$")
