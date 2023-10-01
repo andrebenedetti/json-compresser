@@ -1,5 +1,10 @@
 import { getAllStrings, longestSubtring } from "./utils";
 
+/* Don't use suffix array.
+   It's incredibly inneficient.
+   Leaving it here anyway.
+*/
+
 function buildSuffixArray(str: string) {
     const result: string[] = [];
 
@@ -28,7 +33,6 @@ function suffixArrayLongestRepeatingSubstring(suffixArray, minOccurences: number
             strs.push(sorted[j])
         }
         const localLongest = longestSubtring(...strs);
-        // console.log(`Local longest: ${localLongest}`)
         if (longest === null || localLongest.length > longest.length) {
             longest = localLongest;
         }
