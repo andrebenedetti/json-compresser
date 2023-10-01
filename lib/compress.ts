@@ -1,5 +1,5 @@
 import { getLongestRepeatingSubstring } from "./suffixArray";
-import { addString, newTree, printDepthFirst } from "./suffixTree";
+import { SummaryEntry, addString, newTree, printDepthFirst } from "./suffixTree";
 import { getAllStrings, replaceStringsInObject } from "./utils";
 
 export function compressWithSuffixArray(data) {
@@ -36,5 +36,8 @@ export function compress(data) {
         addString(root, s, symbol)
     }
 
-    printDepthFirst(root, symbol, "")
+    const summary: SummaryEntry[] = []
+    printDepthFirst(root, symbol, "", summary)
+
+    console.log(summary.sort((a, b) => b.size - a.size).slice(10))
 }

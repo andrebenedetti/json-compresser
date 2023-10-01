@@ -43,11 +43,21 @@ export function addString(root: TreeNode, s: string, symbol: string) {
 
 
 
-export function printDepthFirst(root: TreeNode, symbol, acc) {
+export type SummaryEntry = {
+    occurrences: number
+    value: string
+    size: number
+}
+
+export function printDepthFirst(root: TreeNode, symbol: string, acc: string, summary: SummaryEntry[]) {
     for (let e of root.edges) {
         if (e.value === symbol && (e.occurrences || 0) > 1) {
-            console.log(acc, e.occurrences)
+            summary.push({
+                occurrences: (e.occurrences || 0),
+                value: e.value,
+                size: ((e.occurrences || 0) * acc.length) * 2
+            })
         }
-        printDepthFirst(e.target, symbol, acc + e.value)
+        printDepthFirst(e.target, symbol, acc + e.value, summary)
     }
 }
